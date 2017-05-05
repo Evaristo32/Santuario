@@ -17,25 +17,25 @@ import org.springframework.web.bind.annotation.RestController;
 import com.santuario.model.Dizimista;
 import com.santuario.services.DizimistaService;
 
-
-
-
-@Controller
+@Controller	
 @RestController
 public class DizimistaControler {
 
 	@Autowired
 	DizimistaService dizimistaService;
 	
-	@RequestMapping(method = RequestMethod.POST, value = "/dizimista",consumes=MediaType.APPLICATION_JSON_VALUE, produces=MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(method = RequestMethod.POST, value = "/dizimista",consumes=MediaType.APPLICATION_JSON_VALUE,
+			produces=MediaType.APPLICATION_JSON_VALUE)	
 	public ResponseEntity<Dizimista> cadastrar(@RequestBody Dizimista dizimista) {
+		
 		Dizimista dizimistaCadastrado = dizimistaService.salvar(dizimista);
+		
 		return new ResponseEntity<Dizimista>(dizimistaCadastrado, HttpStatus.CREATED);
 	}
 
 	@RequestMapping(method = RequestMethod.GET, value = "/dizimista", produces=MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Collection<Dizimista>> buscarTodos() {
-		System.out.println("####################################### chegamos buscarTodos");
+	
 		Collection<Dizimista> dzimistasBuscados = dizimistaService.consultar();
 		return new ResponseEntity<Collection<Dizimista>>(dzimistasBuscados, HttpStatus.OK);
 	}
@@ -43,7 +43,6 @@ public class DizimistaControler {
 	@RequestMapping(method = RequestMethod.GET, value = "/dizimista/{id}",consumes=MediaType.APPLICATION_JSON_VALUE,produces=MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Dizimista> BuscarPorId(@PathVariable Long id) {
 		
-		System.out.println("####################################### chegamos BuscarPorId");
 		Dizimista dizimistaEncontrado = dizimistaService.buscarPorId(id);
 		if(dizimistaEncontrado != null){
 		return new ResponseEntity<>(dizimistaEncontrado, HttpStatus.OK);
@@ -55,7 +54,6 @@ public class DizimistaControler {
 	@RequestMapping(method = RequestMethod.DELETE, value = "/dizimista/{id}")
 	public ResponseEntity<Dizimista> deletar(@PathVariable Long id) {
 		
-		System.out.println("####################################### chegamos deletar");
 		Dizimista dizimistaParaExcluir = dizimistaService.buscarPorId(id);
 		if(dizimistaParaExcluir != null){
 			dizimistaService.deletar(dizimistaParaExcluir);

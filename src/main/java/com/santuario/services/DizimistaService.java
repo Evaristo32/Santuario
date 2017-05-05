@@ -4,6 +4,8 @@ package com.santuario.services;
 import java.util.Collection;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
+
 import com.santuario.model.Dizimista;
 import com.santuario.repository.DizimistaRepository;
 
@@ -15,8 +17,10 @@ public class DizimistaService{
 	
 	
 	public Dizimista salvar(Dizimista dizimista){
+	
 		return dizimistaRepository.save(dizimista);
 	}
+	
 	public Collection<Dizimista> consultar(){
 		return dizimistaRepository.findAll();
 	}

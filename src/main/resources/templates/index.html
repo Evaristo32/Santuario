@@ -1,0 +1,149 @@
+<html ng-app="moduloDizimista">
+<head>
+<script
+	src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"></link>
+
+</head>
+<body>
+
+	<Div class="container">
+
+		<div class="row">
+
+			<nav class="navbar navbar-default navbar-static-top"></nav>
+
+		</div>
+
+		<div class="row" ng-controller="crudDizimistaCtrl">
+			<div class="col-md-6">
+				<div class="table-responsive">
+					<table class="table">
+						<tr class="success">
+							<td>Cod</td>
+							<td>Nome</td>
+							<td>CPF</td>
+							<td>Ações</td>
+						</tr>
+						<tr ng-repeat="diz in dizimistas">
+							<td>{{diz.id}}</td>
+							<td>{{diz.nomeCompleto}}</td>
+							<td>{{diz.cpf}}</td>
+							<td>
+								<button class="btn btn-danger"
+									ng-click="deletarDizimista(diz.id,$index)">
+									<span class="glyphicon glyphicon-trash"></span>
+								</button>
+								<button class="btn btn-danger"
+									ng-click="editarDizimista(diz, $index)">
+									<span class="glyphicon glyphicon-edit"></span>
+								</button>
+							</td>
+						</tr>
+					</table>
+				</div>
+			</div>
+
+			<div class="col-md-6">
+				<div class="panel panel-success">
+					<div class="panel-heading">Cadastrar Dizimista</div>
+					<div class="panel-body">
+						<div>
+							<label>Nome Completo</label><br /> <input type="text"
+								ng-model="dizimistaDoForm.nomeCompleto" class="form-control" /><br /> <label>Cpf</label><br />
+							<input type="text" ng-model="dizimistaDoForm.cpf" class="form-control" /> <br />
+							<button class="btn btn-success" ng-click="salvarDizimista()">
+								<span ng-if="!editando">Cadastrar</span><span ng-if="editando">Salvar</span>
+							</button>
+							<button class="btn btn-success" ng-click="cancelarEdicao()" ng-if="editando">Cancelar</button>
+						</div>
+					</div>
+				</div>
+			</div>
+
+		</div>
+
+		<div class="row">
+			<nav aria-label="Page navigation">
+				<ul class="pagination">
+					<li><a href="#" aria-label="Previous"> <span
+							aria-hidden="true">&laquo;</span>
+					</a></li>
+					<li><a href="#">1</a></li>
+					<li><a href="#">2</a></li>
+					<li><a href="#">3</a></li>
+					<li><a href="#">4</a></li>
+					<li><a href="#">5</a></li>
+					<li><a href="#" aria-label="Next"> <span
+							aria-hidden="true">&raquo;</span>
+					</a></li>
+				</ul>
+			</nav>
+		</div>
+
+	</Div>
+
+	<script type="text/javascript">
+		var appDizimista = angular.module('moduloDizimista', []);
+
+		appDizimista.controller('crudDizimistaCtrl', function($scope, $http) {
+			
+			
+			$scope.dizimista ={};
+			
+			$scope.editando = false;
+			$http.get("http://localhost:8080/dizimista").then(
+					function(response) {
+						$scope.dizimistas = response.data;
+					});
+			
+			$scope.salvarDizimista = function(){
+				if($scope.editando){
+					obj.id = $scope.dizimistaEditando 
+
+					$http.post("http://localhost:8080/dizimista/", $scope.dizimistaDoForm
+					).then(function(response) {
+						$scope.dizimistas.splice($scope.indexEditando,1 ,response.data);
+						$scope.editando = false;
+						delete $scope.dizimistaDoForm;
+					});	
+				} else {
+					
+					$http.post("http://localhost:8080/dizimista",$scope.dizimistaDoForm
+					).then(function(response) {
+						$scope.dizimistas.push(response.data);
+						$scope.editando = false;
+						delete $scope.dizimistaDoForm;
+					});	
+				}
+			}
+				
+					
+			$scope.deletarDizimista = function(id,index){
+				
+				$http.delete("http://localhost:8080/dizimista/"+id).then(function(response){			
+						$scope.dizimistas.splice(index,1);
+
+				});
+
+			}
+			$scope.editarDizimista = function(dizimista, index){
+				$scope.editando = true;
+				$scope.indexEditando = index
+				$scope.dizimistaDoForm = angular.copy(dizimista);
+			}
+				 
+			$scope.cancelarEdicao = function(){
+				$scope.editando = false;
+				delete $scope.dizimistaDoForm;
+				delete $scope.indexEditando;
+			}
+		});
+		
+		
+		
+	</script>
+
+</body>
+</html>
