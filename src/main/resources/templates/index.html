@@ -93,7 +93,9 @@
 			$scope.dizimista ={};
 			
 			$scope.editando = false;
-			$http.get("http://localhost:8080/dizimista").then(
+			//$http.get("http://localhost:8080/dizimista").then(dizimist.herokuapp
+			$http.get("http://dizimista.herokuapp.com").then(dizimist.herokuapp		
+					 
 					function(response) {
 						$scope.dizimistas = response.data;
 					});
@@ -101,8 +103,8 @@
 			$scope.salvarDizimista = function(){
 				if($scope.editando){
 					obj.id = $scope.dizimistaEditando 
-
-					$http.post("http://localhost:8080/dizimista/", $scope.dizimistaDoForm
+					
+					$http.post("http://dizimista.herokuapp.com",$scope.dizimistaDoForm	
 					).then(function(response) {
 						$scope.dizimistas.splice($scope.indexEditando,1 ,response.data);
 						$scope.editando = false;
@@ -110,7 +112,7 @@
 					});	
 				} else {
 					
-					$http.post("http://localhost:8080/dizimista",$scope.dizimistaDoForm
+					$http.put("http://dizimista.herokuapp.com",$scope.dizimistaDoForm
 					).then(function(response) {
 						$scope.dizimistas.push(response.data);
 						$scope.editando = false;
@@ -122,7 +124,8 @@
 					
 			$scope.deletarDizimista = function(id,index){
 				
-				$http.delete("http://localhost:8080/dizimista/"+id).then(function(response){			
+				//$http.delete("http://localhost:8080/dizimista/"+id).then(function(response){	
+					
 						$scope.dizimistas.splice(index,1);
 
 				});
